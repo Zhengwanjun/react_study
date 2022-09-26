@@ -14,20 +14,76 @@
   <script src="./lib/babel.js"></script>
   
   <script type="text/babel">
-    let msg = 'hello world'
-    function btnClick() {
-      msg = 'hello react'
-      rootRender()
+    // let msg = 'hello world'
+    // function btnClick() {
+    //   msg = 'hello react'
+    //   rootRender()
+    // }
+    // const root = ReactDOM.createRoot(document.querySelector('#root'))
+    // function rootRender() {
+    //   root.render(( //需要一个div包裹
+    //     <div>
+    //       <div>{msg}</div>
+    //       <button onClick={btnClick}></button>
+    //     </div>
+    //   ))
+    // }
+    // rootRender()
+
+
+    // 使用组件
+    // 类组件 函数组件 组件名称大写
+    class App extends React.Component {
+      // 组件数据
+      // 参与数据更新：参与数据流 => state
+      // 不参与数据更新：
+      constructor() {
+        super() // 有继承
+
+        // 参与数据流
+        this.state = {
+          message: 'hello world',
+          name: 'why',
+          age:18
+        }
+
+        // 对需要绑定的方法提前绑定好this
+        this.btnClick = this.btnClick.bind(this)
+      }
+
+      // 组件方法
+      btnClick() {
+        // 这里的this是undefined  es6 class中默认都是严格模式
+        console.log('btn_this',this)
+        // 内部完成了： 1、将state的值修改；2、自动重新执行render函数；
+        this.setState({
+          message: 'hello react'
+        })
+      }
+
+      // 渲染内容 render方法
+      render() {
+        console.log('render_this', this)
+        
+        return (
+          <div>
+            <h2>{this.state.message}</h2>
+            <button onClick={this.btnClick.bind(this)}>修改文本</button>
+            <button onClick={this.btnClick}>修改文本</button>
+          </div>
+        )
+      }
     }
+
+
+    // 将组件渲染到页面上
     const root = ReactDOM.createRoot(document.querySelector('#root'))
-    function rootRender() {
-      root.render(( //需要一个div包裹
-        <div>
-          <div>{msg}</div>
-          <button onClick={btnClick}></button>
-        </div>
-      ))
-    }
-    rootRender()
+    root.render(<App/>)
+
+    /**
+     * 事件绑定
+     * this 在jsx中进行绑定 或者在constructor中进行绑定this
+     * 
+     * /
   </script>
 </html>
